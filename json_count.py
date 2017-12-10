@@ -1,21 +1,25 @@
+#!/bin/env python3.6
 import json
+import urllib.request
 
-data = '''
-    [
-        { "id" : "001",
-            "x" : "2",
-            "name" : "Chuck"
-        } ,
-        { "id" : "009",
-            "x" : "7",
-            "name" : "Chuck"
-        }
-    ]'''
+test_url = "http://py4e-data.dr-chuck.net/comments_42.json"
+while True:
+    my_url = input("Enter the url:")
+    print(my_url)
+    if my_url == "":
+        #my_data = urllib.request.urlopen(test_url).read().decode()
+        my_data = urllib.request.urlopen(test_url).read()
+    else:
+        my_data = urllib.request.urlopen(my_url).read().decode()
 
-info = json.loads(data)
-print('User count:', len(info))
+    my_json = json.loads(my_data)
+    print(type(my_json), '\n', my_json)
+    if 'comments' not in my_json:
+        print("No comments found")
+        continue
 
-for item in info:
-    print('Name', item['name'])
-    print('Id', item['id'])
-    print('Attribute', item['x'])
+    sum = 0 
+    for comment in my_json['comments']:
+        sum += comment['count']
+
+    print(sum)
